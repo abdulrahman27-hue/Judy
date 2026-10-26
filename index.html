@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>لجودي 🌹</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:dark;--bg1:#2a0510;--bg2:#5c0a22;--rose:#ff4d79;--soft:#ffd1dc;--card:rgba(255,255,255,.08);--line:rgba(255,255,255,.18)}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{font-family:"Segoe UI",Tahoma,Arial,sans-serif;color:#fff;background:radial-gradient(circle at 50% 0,var(--bg2),var(--bg1) 70%) fixed;overflow-x:hidden}
+.petal{position:fixed;top:-40px;font-size:22px;opacity:.7;pointer-events:none;animation:fall linear infinite;z-index:0}
+@keyframes fall{to{transform:translateY(115vh) rotate(360deg)}}
+.screen{position:relative;z-index:1;display:none;min-height:100vh;padding:24px 16px;flex-direction:column;align-items:center}
+.screen.on{display:flex}
+#gate{justify-content:center;text-align:center}
+.big{font-size:64px;margin:0}
+h1{margin:8px 0 18px;font-size:26px;color:var(--soft)}
+#pw{width:min(280px,80vw);padding:14px;border-radius:16px;border:2px solid var(--line);background:var(--card);color:#fff;font-size:22px;text-align:center;outline:none;letter-spacing:6px}
+#pw:focus{border-color:var(--rose);box-shadow:0 0 18px rgba(255,77,121,.5)}
+button{font:inherit;cursor:pointer}
+.btn{margin-top:14px;padding:12px 34px;border:0;border-radius:30px;background:linear-gradient(135deg,#ff4d79,#c9184a);color:#fff;font-size:18px;box-shadow:0 6px 18px rgba(201,24,74,.5)}
+.shake{animation:shake .5s}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-12px)}40%{transform:translateX(12px)}60%{transform:translateX(-9px)}80%{transform:translateX(9px)}}
+#err{min-height:30px;margin-top:12px;color:#ff8fa8;font-size:20px;font-weight:700}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:12px;width:min(560px,100%);margin-top:10px}
+.c{aspect-ratio:1;border-radius:50%;border:2px solid var(--line);background:var(--card);color:#fff;font-size:20px;font-weight:700;transition:.2s}
+.c:active{transform:scale(.9)}
+.c:hover{border-color:var(--rose)}
+.c.done{background:linear-gradient(135deg,#ff4d79,#c9184a);border-color:transparent}
+.prog{color:var(--soft);margin:0 0 4px}
+#modal{position:fixed;inset:0;z-index:5;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;padding:16px}
+#modal.on{display:flex}
+.box{width:min(420px,100%);background:linear-gradient(160deg,#4a0a1f,#2a0510);border:1px solid var(--line);border-radius:24px;padding:24px;text-align:center}
+.box h2{margin:0 0 14px;color:var(--soft)}
+.row{display:flex;gap:10px;justify-content:center}
+select{flex:1;padding:12px;border-radius:12px;border:2px solid var(--line);background:#3b0818;color:#fff;font-size:18px;text-align:center}
+label{display:block;font-size:13px;color:var(--soft);margin-bottom:4px}
+.msg{font-size:22px;line-height:1.9;margin:10px 0 18px;min-height:90px;display:flex;align-items:center;justify-content:center}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{padding:12px;border-radius:16px;border:2px solid var(--line);background:var(--card);color:#fff;font-size:19px}
+.opt:hover,.opt.sel{border-color:var(--rose);background:rgba(255,77,121,.25)}
+.x{background:none;border:0;color:var(--soft);margin-top:10px;font-size:15px}
+#ctl{align-items:stretch;max-width:640px;margin:0 auto;width:100%}
+table{width:100%;border-collapse:collapse;margin-top:10px;background:var(--card);border-radius:14px;overflow:hidden}
+th,td{padding:10px 6px;text-align:center;border-bottom:1px solid var(--line);font-size:15px}
+th{color:var(--soft);background:rgba(0,0,0,.25)}
+.del{padding:6px 10px;border-radius:10px;border:0;background:#c9184a;color:#fff;font-size:14px}
+.tools{display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.ghost{padding:8px 14px;border-radius:12px;border:1px solid var(--line);background:none;color:#fff}
+.empty{text-align:center;color:var(--soft);padding:24px}
+.sum{display:flex;gap:8px;margin-top:10px;font-size:14px;color:var(--soft);flex-wrap:wrap}
+.sum span{background:var(--card);padding:6px 10px;border-radius:20px}
+</style>
+</head>
+<body>
+<div id="petals"></div>
+
+<section class="screen on" id="gate">
+  <p class="big">🌹</p>
+  <h1>Judy</h1>
+  <input id="pw" type="password" inputmode="numeric" placeholder="كلمة السر" autocomplete="off">
+  <div id="err"></div>
+  <button class="btn" id="go">ادخلي</button>
+</section>
+
+<section class="screen" id="home">
+  <h1>🌹 رسائل ليكي يا جودي 🌹</h1>
+  <p class="prog" id="prog"></p>
+  <div class="grid" id="grid"></div>
+</section>
+
+<section class="screen" id="ctl">
+  <h1>🎛️ غرفة التحكم</h1>
+  <div class="tools"><div class="sum" id="sum"></div><div><button class="ghost" id="reset">إعادة الكل</button> <button class="ghost" id="out">خروج</button></div></div>
+  <table><thead><tr><th>الرسالة</th><th>التاريخ</th><th>التقييم</th><th></th></tr></thead><tbody id="rows"></tbody></table>
+</section>
+
+<div id="modal"><div class="box" id="box"></div></div>
+
+<script>
+const M=["👑 مفيش حد أحسن مني.","🌸 ﴿فَإِنَّ مَعَ الْعُسْرِ يُسْرًا ۝ إِنَّ مَعَ الْعُسْرِ يُسْرًا﴾ الشرح: 5-6","🔥 الحماس بيجيلك بعد ما تبدأي، مش قبلها.","🦁 كل إنجاز عظيم يليق بشخص عظيم.","📚 مش لازم تكوني متحمسة، كفاية تبدأي.","🌅 لا تيأسي، فبعد الليل فجر.","⚡ إيه اللي يوقفني؟ ولا حاجة.","💎 الدنيا مش بتدي حاجة ببلاش، بس اللي بيتعب بياخد.","🤲 ﴿وَمَن يَتَوَكَّلْ عَلَى اللَّهِ فَهُوَ حَسْبُهُ﴾ الطلاق: 3","😏 هنخيب؟","🎯 كل صفحة بتخلّصيها بتقرّبك خطوة.","🏔️ الطريق إلى القمة لا يخلو من التعب.","🤍 كمّلي علشان نفسك اللي لسه ماوصلتيش للي بتحلمي بيه.","🌷 ﴿وَلَسَوْفَ يُعْطِيكِ رَبُّكِ فَتَرْضَيْنَ﴾","⏳ ساعة واحدة دلوقتي بتوفر عليكي سنة ندم.","💪 ثقي بنفسك، إنتِ أقدر مما تتخيلي.","⚔️ وما نيل المطالب بالتمني، ولكن تؤخذ الدنيا كدهو.","🎓 التعب ده مؤقت، والشهادة دايمة.","🌿 ﴿إِنَّ اللَّهَ لَا يُضِيعُ أَجْرَ الْمُحْسِنِينَ﴾ التوبة: 120","🔥 اللي مفكر إني هقف هيفضل طول عمره مفكر.","💧 قطرةً بعد قطرة تصنع نهرًا.","🚀 كمّلي، النهاردة التعب وبكرة الفرحة.","🧠 ﴿هَلْ يَسْتَوِي الَّذِينَ يَعْلَمُونَ وَالَّذِينَ لَا يَعْلَمُونَ﴾ الزمر: 9","🐢 حتى لو بطيئة، المهم متوقفيش.","🌬️ إذا هبّت رياحك فاغتنميها.","📖 كل الناجحين مرّوا باليوم اللي إنتِ فيه ده.","🌈 ﴿وَلَا تَيْأَسُوا مِن رَّوْحِ اللَّهِ﴾ يوسف: 87","🔥 Everybody wants to know what would I do if I didn’t win? I guess we’ll never know.","💪 إنتِ اللي اخترتي الطريق ده، وإنتِ قدّه.","🌤️ ﴿فَاصْبِرْ إِنَّ وَعْدَ اللَّهِ حَقٌّ﴾ غافر: 55","🛤️ النجاح رحلة مش مجرد وجهة.","📚 من لم يتحمّل ذلّ التعلّم ساعة، تجرّع ذلّ الجهل أبدًا.","🤍 ﴿لَا يُكَلِّفُ اللَّهُ نَفْسًا إِلَّا وُسْعَهَا﴾ البقرة: 286","😴 الكسل بيريّح ساعة ويتعب سنين.","🧗‍♀️ بلاش تفكري في الجبل كله، خدي خطوة واحدة.","👑 متقارنيش نفسك بحد عشان إنتي أحسن منهم كلهم.","💫 ﴿فَإِذَا عَزَمْتِ فَتَوَكَّلِي عَلَى اللَّهِ﴾","🌟 بكرة هتبصي وراكي وتقولي: الحمد لله إني كملت.","💡 الفشل مش نهاية الطريق، لكنه درس في بدايته.","🤲 ربنا مش هيضيّع تعبك.","🦁 ﴿وَلَا تَهِنُوا وَلَا تَحْزَنُوا وَأَنتُمُ الْأَعْلَوْنَ إِن كُنتُم مُّؤْمِنِينَ﴾ آل عمران: 139","🛤️ الطريق طويل، بس إنتِ ماشية فيه، وده كفاية.","💧 يوم مذاكرة وحش أحسن من يوم من غير مذاكرة.","🤍 ﴿وَاصْبِرْ وَمَا صَبْرُكَ إِلَّا بِاللَّهِ﴾ النحل: 127","💪 متستسلميش وإنتِ قريبة، محدش بيعرف النهاية من النص.","🎯 ﴿وَأَن لَّيْسَ لِلْإِنسَانِ إِلَّا مَا سَعَىٰ﴾ النجم: 39","🌸 بكرة هتفرحي إنك ما استسلمتيش.","🫵🏻 مفيش حد اشطر منك","🔥 لو اتكتب علينا نلعب.. يبقى ندغدغ الملعب"];
+const R=["شجعتك😁","شجعتني اويي😍","خطيرهه🔥🔥"];
+const MON=["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
+const $=id=>document.getElementById(id);
+let S={opened:{}},KEY="judy_state_v1";
+
+// falling petals
+for(let i=0;i<14;i++){const p=document.createElement("div");p.className="petal";p.textContent=i%3?"🌹":"🌸";p.style.left=Math.random()*100+"vw";p.style.animationDuration=(9+Math.random()*10)+"s";p.style.animationDelay=(-Math.random()*15)+"s";$("petals").appendChild(p)}
+
+function show(id){document.querySelectorAll(".screen").forEach(s=>s.classList.toggle("on",s.id===id));scrollTo(0,0)}
+
+// storage: Firebase Realtime Database (shared between devices) + local backup
+const DB="https://judy77-95e05-default-rtdb.firebaseio.com/state.json";
+let busy=0;
+function norm(d){const o={};if(d&&d.opened){const src=d.opened;Object.keys(src).forEach(k=>{if(src[k])o[k]=src[k]})}return {opened:o}}
+function loadLocal(){try{const v=JSON.parse(localStorage.getItem(KEY));if(v&&v.opened)S=norm(v)}catch(e){}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}
+  busy++;fetch(DB,{method:"PUT",body:JSON.stringify(S)}).catch(()=>{}).finally(()=>{busy--})}
+async function pull(){
+  if(busy)return;
+  try{const r=await fetch(DB);if(!r.ok||busy)return;const d=await r.json();S=norm(d);try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}refresh()}catch(e){}
+}
+function init(){loadLocal();pull();setInterval(pull,3000)}
+function refresh(){if($("home").classList.contains("on"))drawGrid();if($("ctl").classList.contains("on"))drawCtl()}
+
+// gate
+function tryPw(){
+  const v=$("pw").value.trim();
+  if(v==="307"){$("pw").value="";$("err").textContent="";show("home");drawGrid()}
+  else if(v==="371000"){$("pw").value="";$("err").textContent="";show("ctl");drawCtl()}
+  else{$("err").textContent="ازاي مش عارفة😡";const p=$("pw");p.classList.remove("shake");void p.offsetWidth;p.classList.add("shake");if(navigator.vibrate)navigator.vibrate(200)}
+}
+$("go").onclick=tryPw;$("pw").onkeydown=e=>{if(e.key==="Enter")tryPw()};
+
+// circles
+function drawGrid(){
+  const g=$("grid");g.textContent="";
+  const n=Object.keys(S.opened).length;$("prog").textContent="اتفتح "+n+" من 50";
+  for(let i=1;i<=50;i++){const b=document.createElement("button");b.className="c"+(S.opened[i]?" done":"");b.textContent=i;b.onclick=()=>openMsg(i);g.appendChild(b)}
+}
+function closeModal(){$("modal").classList.remove("on");drawGrid()}
+function openMsg(i){
+  const box=$("box");box.textContent="";
+  const o=S.opened[i];
+  if(!o){
+    const h=document.createElement("h2");h.textContent="رسالة رقم "+i+" 🔒";box.appendChild(h);
+    const p=document.createElement("p");p.textContent="اكتبي تاريخ فتح الرسالة";p.style.color="#ffd1dc";box.appendChild(p);
+    const row=document.createElement("div");row.className="row";
+    const mk=(lab,opts)=>{const w=document.createElement("div");w.style.flex="1";const l=document.createElement("label");l.textContent=lab;const s=document.createElement("select");opts.forEach(([v,t])=>{const e=document.createElement("option");e.value=v;e.textContent=t;s.appendChild(e)});w.append(l,s);row.appendChild(w);return s};
+    const now=new Date();
+    const dS=mk("اليوم",Array.from({length:31},(_,k)=>[k+1,k+1]));
+    const mS=mk("الشهر",MON.map((m,k)=>[k+1,(k+1)+" - "+m]));
+    dS.value=now.getDate();mS.value=now.getMonth()+1;
+    box.appendChild(row);
+    const b=document.createElement("button");b.className="btn";b.textContent="افتحي الرسالة 💌";
+    b.onclick=()=>{S.opened[i]={d:+dS.value,m:+mS.value,r:null};save();showMsg(i)};
+    box.appendChild(b);
+    const x=document.createElement("button");x.className="x";x.textContent="رجوع";x.onclick=closeModal;box.appendChild(x);
+  }else showMsg(i);
+  $("modal").classList.add("on");
+}
+function showMsg(i){
+  const box=$("box");box.textContent="";
+  const h=document.createElement("h2");h.textContent="رسالة رقم "+i+" 💌";box.appendChild(h);
+  const m=document.createElement("div");m.className="msg";m.textContent=M[i-1];box.appendChild(m);
+  const op=document.createElement("div");op.className="opts";
+  const cur=S.opened[i].r;
+  R.forEach(r=>{const b=document.createElement("button");b.className="opt"+(cur===r?" sel":"");b.textContent=r;b.onclick=()=>{S.opened[i].r=r;save();closeModal()};op.appendChild(b)});
+  box.appendChild(op);
+  const x=document.createElement("button");x.className="x";x.textContent="إغلاق";x.onclick=closeModal;box.appendChild(x);
+}
+
+// control room
+const OP={};
+function drawCtl(){
+  const keys=Object.keys(S.opened).map(Number).sort((a,b)=>a-b);
+  const cnt={};R.forEach(r=>cnt[r]=0);keys.forEach(k=>{const r=S.opened[k].r;if(r in cnt)cnt[r]++});
+  const sum=$("sum");sum.textContent="";
+  [["اتفتح "+keys.length+"/50"],...R.map(r=>[r+" "+cnt[r]])].forEach(([t])=>{const s=document.createElement("span");s.textContent=t;sum.appendChild(s)});
+  const tb=$("rows");tb.textContent="";
+  if(!keys.length){const tr=document.createElement("tr"),td=document.createElement("td");td.colSpan=4;td.className="empty";td.textContent="لسه مفيش رسايل اتفتحت 🌹";tr.appendChild(td);tb.appendChild(tr);return}
+  keys.forEach(k=>{const o=S.opened[k],tr=document.createElement("tr");
+    [k,o.d+" / "+MON[o.m-1],o.r||"لسه ما اختارتش"].forEach(t=>{const td=document.createElement("td");td.textContent=t;tr.appendChild(td)});
+    const td=document.createElement("td"),b=document.createElement("button");b.className="del";b.textContent="حذف وإعادة";
+    b.onclick=e=>{e.stopPropagation();delete S.opened[k];delete OP[k];save();drawCtl()};td.appendChild(b);tr.appendChild(td);tr.style.cursor="pointer";tb.appendChild(tr);
+    const dr=document.createElement("tr"),dc=document.createElement("td");dc.colSpan=4;dc.textContent=M[k-1];dc.style.cssText="font-size:17px;line-height:1.8;background:rgba(255,77,121,.12)";dr.appendChild(dc);dr.style.display=OP[k]?"":"none";tb.appendChild(dr);
+    tr.onclick=()=>{OP[k]=!OP[k];dr.style.display=OP[k]?"":"none"}});
+}
+$("reset").onclick=()=>{if(confirm("تمسحي كل المشاهدات وترجعي الرسايل كلها من الأول؟")){S.opened={};save();drawCtl()}};
+$("out").onclick=()=>{show("gate")};
+init();
+</script>
+</body>
+</html>
